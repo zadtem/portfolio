@@ -9,7 +9,7 @@ const navItems = [
   { label: "Contact", href: "#contact", accent: true }
 ];
 
-const siteUrl = "https://tem.works";
+const siteUrl = "https://tem.works/?ref=navbutton";
 
 async function copyText(value: string) {
   if (navigator.clipboard?.writeText) {

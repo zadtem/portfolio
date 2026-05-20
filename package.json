@@ -15,6 +15,7 @@
     "@fontsource/manrope": "latest",
     "@fontsource/work-sans": "^5.2.8",
     "@phosphor-icons/react": "latest",
+    "@vercel/analytics": "^2.0.1",
     "framer-motion": "latest",
     "lenis": "^1.3.23",
     "next": "latest",
