@@ -7,10 +7,21 @@ type WorkGridProps = {
 
 export default function WorkGrid({ onOpenProject }: WorkGridProps) {
   return (
-    <section className="work-section" id="work" aria-label="Selected work">
+    <section
+      className="work-section"
+      id="work"
+      aria-label="Selected work"
+      data-card-reveal-section
+      data-section
+    >
       <div className="work-grid">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} onOpenProject={onOpenProject} />
+        {projects.map((project, index) => (
+          <ProjectCard
+            key={project.id}
+            index={index}
+            project={project}
+            onOpenProject={onOpenProject}
+          />
         ))}
       </div>
     </section>

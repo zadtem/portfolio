@@ -77,6 +77,7 @@ export default function CaseStudyOverlay({ caseStudy, onClose }: CaseStudyOverla
       {caseStudy ? (
         <motion.div
           className="case-overlay"
+          data-lenis-prevent
           role="dialog"
           aria-modal="true"
           aria-labelledby="case-study-title"
@@ -104,7 +105,7 @@ export default function CaseStudyOverlay({ caseStudy, onClose }: CaseStudyOverla
               onClick={onClose}
               ref={closeButtonRef}
             >
-              <ArrowsInSimple aria-hidden="true" size={48} />
+              <ArrowsInSimple aria-hidden="true" size={24} />
             </button>
 
             <article className="case-study">
@@ -141,7 +142,7 @@ export default function CaseStudyOverlay({ caseStudy, onClose }: CaseStudyOverla
                         <p key={point}>{point}</p>
                       ))}
                     </div>
-                    <a href="#" onClick={(event) => event.preventDefault()}>
+                    <a href={section.href} target="_blank" rel="noopener noreferrer">
                       {section.linkLabel}
                     </a>
                   </div>

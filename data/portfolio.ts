@@ -1,4 +1,10 @@
 export type ProjectVariant = "hero" | "phone" | "gallery" | "marketplace";
+export type ProjectStatus = "case-study" | "coming-soon";
+
+export type MarketplaceSequenceItem = {
+  label: string;
+  image: string;
+};
 
 export type ProjectCard = {
   id: string;
@@ -6,6 +12,8 @@ export type ProjectCard = {
   company?: string;
   role?: string;
   summary?: string;
+  status: ProjectStatus;
+  caseStudyId?: string;
   variant: ProjectVariant;
   previewable?: boolean;
   assets: {
@@ -14,6 +22,8 @@ export type ProjectCard = {
     dashboard?: string;
     gallery?: string[];
     background?: string;
+    marketplaceLogo?: string;
+    marketplaceSequence?: MarketplaceSequenceItem[];
   };
 };
 
@@ -31,17 +41,56 @@ export type ToolLogo = {
 export type ContactLink = {
   label: string;
   href: string;
-  icon: string;
+  icon?: string;
+  iconType: "image" | "email" | "whatsapp";
+  group: "primary" | "secondary";
   tone: "linkedin" | "upwork" | "telegram" | "plain";
 };
 
-export type TidbitCard = {
+type TidbitCardBase = {
   title: string;
   eyebrow: string;
-  body: string;
-  image?: string;
   tone: "soft" | "pink" | "ink" | "solar" | "green";
 };
+
+export type TidbitPinterestCard = TidbitCardBase & {
+  kind: "pinterest";
+  boardUrl: string;
+  boardDescription: string;
+};
+
+export type TidbitSpotifyCard = TidbitCardBase & {
+  kind: "spotify";
+  playlistId: string;
+};
+
+export type TidbitIframeCard = TidbitCardBase & {
+  kind: "iframe";
+  src: string;
+  body?: string;
+};
+
+export type TidbitPromoCard = TidbitCardBase & {
+  kind: "promo";
+  logo: string;
+  previewImages?: string[];
+  tagline: string;
+  href: string;
+};
+
+export type TidbitVisualCard = TidbitCardBase & {
+  kind: "visual";
+  image: string;
+  previewImages?: string[];
+  href: string;
+};
+
+export type TidbitCard =
+  | TidbitPinterestCard
+  | TidbitSpotifyCard
+  | TidbitIframeCard
+  | TidbitPromoCard
+  | TidbitVisualCard;
 
 export type CaseStudy = {
   id: string;
@@ -59,6 +108,7 @@ export type CaseStudy = {
     title: string;
     points: string[];
     linkLabel: string;
+    href: string;
     media: string[];
   }>;
   testimonial: {
@@ -75,6 +125,8 @@ export const projects: ProjectCard[] = [
     company: "Projetsolaire",
     role: "Lead product designer",
     summary: "End-to-end redesign of the projetsolaire landing site",
+    status: "case-study",
+    caseStudyId: "projetsolaire",
     variant: "hero",
     previewable: true,
     assets: {
@@ -89,6 +141,7 @@ export const projects: ProjectCard[] = [
     role: "Senior interaction designer",
     summary:
       "How we made brainbite's web and mobile apps come alive with Rive animations and gamification.",
+    status: "coming-soon",
     variant: "phone",
     assets: {
       phone: "/assets/brainbite-phone.png",
@@ -102,6 +155,7 @@ export const projects: ProjectCard[] = [
     role: "Various roles",
     summary:
       "A free canvas view of some brand and UX design work from 8+ years of design practice.",
+    status: "coming-soon",
     variant: "gallery",
     assets: {
       gallery: [
@@ -118,10 +172,30 @@ export const projects: ProjectCard[] = [
     company: "Projetsolaire",
     role: "Marketplace strategy",
     summary:
-      "A system map for connecting solar leads, installers, quotes, and installed systems.",
+      "A story of how we built a comprehensive solar customers sales funnel, and the system to manage it.",
+    status: "coming-soon",
     variant: "marketplace",
     assets: {
-      dashboard: "/assets/marketplace-dashboard.png"
+      dashboard: "/assets/marketplace-prospective.png",
+      marketplaceLogo: "/assets/marketplace-logo.png",
+      marketplaceSequence: [
+        {
+          label: "Prospective customers",
+          image: "/assets/marketplace-prospective.png"
+        },
+        {
+          label: "Hardware selling partners",
+          image: "/assets/marketplace-prospective-overlay.png"
+        },
+        {
+          label: "Customers with quotes",
+          image: "/assets/marketplace-quotes.png"
+        },
+        {
+          label: "Self-Installing customers",
+          image: "/assets/marketplace-self-installing.png"
+        }
+      ]
     }
   }
 ];
@@ -145,109 +219,120 @@ export const experiences: ExperienceItem[] = [
 ];
 
 export const tools: ToolLogo[] = [
-  { name: "Figma", src: "/assets/figma.svg" },
-  { name: "Cursor", src: "/assets/cursor.png" },
-  { name: "Rive", src: "/assets/rive.svg" },
-  { name: "Framer", src: "/assets/framer.svg" },
-  { name: "Illustrator", src: "/assets/illustrator.svg" },
-  { name: "After Effects", src: "/assets/aftereffects.svg" }
+  { name: "Figma", src: "/assets/tool-figma.png" },
+  { name: "Cursor", src: "/assets/tool-cursor.png" },
+  { name: "Rive", src: "/assets/tool-rive.png" },
+  { name: "Framer", src: "/assets/tool-framer.png" },
+  { name: "Illustrator", src: "/assets/tool-illustrator.png" },
+  { name: "After Effects", src: "/assets/tool-aftereffects.png" }
 ];
 
 export const contactLinks: ContactLink[] = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/temesgenaymamo/",
-    icon: "/assets/linkedin.svg",
+    icon: "/assets/contact-linkedin.png",
+    iconType: "image",
+    group: "primary",
     tone: "linkedin"
   },
   {
     label: "Upwork",
     href: "https://www.upwork.com/freelancers/~012600e15d8efd8eb0",
-    icon: "/assets/upwork.svg",
+    icon: "/assets/contact-upwork.png",
+    iconType: "image",
+    group: "primary",
     tone: "upwork"
   },
   {
     label: "Telegram",
     href: "https://t.me/just_tem",
-    icon: "/assets/telegram.svg",
+    icon: "/assets/contact-telegram.png",
+    iconType: "image",
+    group: "primary",
     tone: "telegram"
+  },
+  {
+    label: "Email",
+    href: "mailto:temesgenaymamo@gmail.com",
+    iconType: "email",
+    group: "secondary",
+    tone: "plain"
+  },
+  {
+    label: "WhatsApp",
+    href: "https://wa.me/251978254808",
+    iconType: "whatsapp",
+    group: "secondary",
+    tone: "plain"
   }
 ];
 
 export const tidbits: TidbitCard[] = [
   {
-    title: "Motion studies",
-    eyebrow: "Interaction",
-    body:
-      "Small prototypes exploring when motion clarifies state changes and when it gets in the way.",
-    image: "/assets/brand-1.jpg",
-    tone: "pink"
+    kind: "pinterest",
+    title: "Kitty mechanic",
+    eyebrow: "Pinterest",
+    tone: "pink",
+    boardUrl: "https://www.pinterest.com/meursaultfrommerkato/kitty-mechanic/",
+    boardDescription: "Cars, details, and the people who love them."
   },
   {
-    title: "Solar flows",
-    eyebrow: "Systems",
-    body:
-      "A collection of notes on quote flows, calculators, installer onboarding, and lead quality.",
-    image: "/assets/marketplace-dashboard.png",
-    tone: "solar"
+    kind: "spotify",
+    title: "Floatin by",
+    eyebrow: "Playlist",
+    tone: "solar",
+    playlistId: "4Ewhtz7Q06d1BLAHWB3ebD"
   },
   {
-    title: "Rive experiments",
-    eyebrow: "Animation",
-    body:
-      "Character moments, game-like feedback, and tiny reward loops for product experiences.",
-    image: "/assets/brainbite-phone.png",
-    tone: "green"
+    kind: "visual",
+    title: "Bitmap generator",
+    eyebrow: "Side project",
+    tone: "soft",
+    image: "/assets/bitsme-preview.png",
+    previewImages: ["/assets/bitsme-preview.png"],
+    href: "https://bitsme.tem.works"
   },
   {
-    title: "Brand fragments",
-    eyebrow: "Identity",
-    body:
-      "Logo directions, marks, typography tests, and visual systems from client explorations.",
-    image: "/assets/brand-3.png",
-    tone: "soft"
+    kind: "pinterest",
+    title: "It moves?",
+    eyebrow: "Pinterest",
+    tone: "green",
+    boardUrl: "https://www.pinterest.com/meursaultfrommerkato/it-moves/",
+    boardDescription: "Looping videos, smooth motion, hypnotic things."
   },
   {
-    title: "Useful constraints",
-    eyebrow: "Process",
-    body:
-      "The best ideas usually came from making technical limits visible early enough to design with them.",
-    tone: "ink"
+    kind: "spotify",
+    title: "Intergalactic traveller",
+    eyebrow: "Playlist",
+    tone: "ink",
+    playlistId: "5QRQ0LRO3vpAE7rL8tngvn"
   },
   {
-    title: "Interface maps",
-    eyebrow: "UX",
-    body:
-      "Before screens, I like drawing the agreement between people, systems, and the promises in between.",
-    tone: "soft"
+    kind: "promo",
+    title: "Split/it",
+    eyebrow: "Side project",
+    tone: "soft",
+    logo: "/assets/split-it-logo.svg",
+    previewImages: ["/assets/split-it-logo.svg"],
+    tagline: "split bills with friends",
+    href: "https://bills.tem.works"
   },
   {
-    title: "Microcopy",
-    eyebrow: "Writing",
-    body:
-      "Notes on making product language feel direct, warm, and unambiguous without sounding flat.",
-    tone: "pink"
+    kind: "pinterest",
+    title: "The design is human",
+    eyebrow: "Pinterest",
+    tone: "soft",
+    boardUrl:
+      "https://www.pinterest.com/meursaultfrommerkato/the-design-is-very-human/",
+    boardDescription: "Industrial design that starts with how things feel."
   },
   {
-    title: "Toolbox",
-    eyebrow: "Craft",
-    body:
-      "Figma for structure, Rive for life, Framer for fast feel, and code when the idea needs a pulse.",
-    tone: "green"
-  },
-  {
-    title: "Off the top",
-    eyebrow: "Archive",
-    body:
-      "Loose sketches, remembered problems, and half-formed design instincts worth revisiting later.",
-    tone: "solar"
-  },
-  {
-    title: "Field notes",
-    eyebrow: "Research",
-    body:
-      "Patterns from conversations with homeowners, installers, founders, and teams under pressure.",
-    tone: "ink"
+    kind: "spotify",
+    title: "Zuko alone",
+    eyebrow: "Playlist",
+    tone: "pink",
+    playlistId: "2lUWuXNupDhDK3ZkYoKzU1"
   }
 ];
 
@@ -287,6 +372,7 @@ export const caseStudies: CaseStudy[] = [
           "Since solar is technical, the learning blog needed to surface higher in the journey."
         ],
         linkLabel: "Visit the site",
+        href: "https://projetsolaire.com",
         media: [
           "/assets/homeowners-wide.png",
           "/assets/projetsolaire-phone.png",
@@ -301,6 +387,7 @@ export const caseStudies: CaseStudy[] = [
           "They want demonstrated use cases they can apply, so features and solutions were surfaced separately."
         ],
         linkLabel: "Visit the site",
+        href: "https://projetsolaire.com/installer",
         media: ["/assets/projetsolaire-desktop.png", "/assets/installer-strip.png"]
       }
     ],
