@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AboutSection from "@/components/AboutSection";
 import CaseStudyOverlay from "@/components/CaseStudyOverlay";
-import ContactCTA from "@/components/ContactCTA";
 import Header from "@/components/Header";
+import HomeContactCTA from "@/components/HomeContactCTA";
 import SmoothScrollController from "@/components/SmoothScrollController";
 import TidbitsSection from "@/components/TidbitsSection";
 import WorkGrid from "@/components/WorkGrid";
@@ -135,7 +135,7 @@ export default function PortfolioExperience() {
         <WorkGrid onOpenProject={openProject} />
         <AboutSection />
         <TidbitsSection />
-        <ContactCTA />
+        <HomeContactCTA onOpenProject={openProject} />
       </main>
       <CaseStudyOverlay caseStudy={activeCaseStudy} onClose={closeProject} />
     </>

@@ -87,7 +87,7 @@ function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pintere
 
   useEffect(() => {
     const controller = new AbortController();
-    const params = new URLSearchParams({ boardUrl: card.boardUrl });
+    const params = new URLSearchParams({ rssUrl: card.rssUrl });
 
     fetch(`/api/pinterest-board?${params.toString()}`, {
       signal: controller.signal
@@ -101,10 +101,11 @@ function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pintere
       })
       .then((payload) => {
         if (!controller.signal.aborted) {
-          const items = (payload.items ?? []).map(({ id, imageUrl, alt }) => ({
+          const items = (payload.items ?? []).map(({ id, imageUrl, alt, link }) => ({
             id,
             imageUrl,
-            alt
+            alt,
+            link
           }));
           setImages(randomizeInitialImage(items));
         }
@@ -116,7 +117,7 @@ function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pintere
       });
 
     return () => controller.abort();
-  }, [card.boardUrl]);
+  }, [card.rssUrl]);
 
   return (
     <PreviewCard
@@ -191,18 +192,31 @@ function PreviewCard({
 }) {
   const prefersReducedMotion = useReducedMotion();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const isPreviewing = isFocused || isHovered;
   const activeImage = images.length ? images[activeImageIndex % images.length] : undefined;
 
-  const changeImage = () => {
-    if (images.length <= 1) {
+  useEffect(() => {
+    if (!isPreviewing || images.length <= 1) {
       return;
     }
 
-    setActiveImageIndex((currentIndex) => {
-      const offset = Math.floor(Math.random() * (images.length - 1)) + 1;
-      return (currentIndex + offset) % images.length;
-    });
-  };
+    let cancelled = false;
+    const nextImageIndex = (activeImageIndex + 1) % images.length;
+    const timeout = window.setTimeout(async () => {
+      const isLoaded = await preloadImage(images[nextImageIndex].imageUrl);
+
+      if (!cancelled && isLoaded) {
+        setActiveImageIndex(nextImageIndex);
+      }
+    }, 3000);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeout);
+    };
+  }, [activeImageIndex, images, isPreviewing]);
 
   return (
     <motion.a
@@ -211,8 +225,10 @@ function PreviewCard({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${eyebrow}: ${title}`}
-      onFocus={changeImage}
-      onMouseEnter={changeImage}
+      onBlur={() => setIsFocused(false)}
+      onFocus={() => setIsFocused(true)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <span className="tidbit-preview__label">
         <span>{eyebrow}</span>
@@ -222,31 +238,19 @@ function PreviewCard({
         <span>{title}</span>
       </span>
       <span className="tidbit-preview__media" aria-hidden={!activeImage}>
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence initial={false}>
           {activeImage ? (
             <motion.img
               key={activeImage.id}
               src={activeImage.imageUrl}
               alt={activeImage.alt}
-              initial={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, scale: 1.16, y: 34, filter: "blur(10px)" }
-              }
-              animate={
-                prefersReducedMotion
-                  ? { opacity: 1 }
-                  : { opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }
-              }
-              exit={
-                prefersReducedMotion
-                  ? { opacity: 0 }
-                  : { opacity: 0, scale: 0.98, y: -18, filter: "blur(8px)" }
-              }
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={
                 prefersReducedMotion
                   ? { duration: 0.16 }
-                  : { duration: 0.82, ease: [0.16, 1, 0.3, 1] }
+                  : { duration: 0.72, ease: "easeInOut" }
               }
             />
           ) : null}
@@ -255,6 +259,15 @@ function PreviewCard({
       </span>
     </motion.a>
   );
+}
+
+function preloadImage(imageUrl: string) {
+  return new Promise<boolean>((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(true);
+    image.onerror = () => resolve(false);
+    image.src = imageUrl;
+  });
 }
 
 function randomizeInitialImage(images: PreviewImage[]) {

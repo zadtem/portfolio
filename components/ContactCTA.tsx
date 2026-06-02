@@ -5,23 +5,24 @@ import { contactLinks, type ContactLink } from "@/data/portfolio";
 
 type ContactCTAProps = {
   compact?: boolean;
+  titleId?: string;
 };
 
-export default function ContactCTA({ compact = false }: ContactCTAProps) {
+export default function ContactCTA({ compact = false, titleId }: ContactCTAProps) {
   const primaryLinks = contactLinks.filter((link) => link.group === "primary");
   const secondaryLinks = contactLinks.filter((link) => link.group === "secondary");
-  const titleId = compact ? "case-contact-title" : "contact-title";
+  const resolvedTitleId = titleId ?? (compact ? "case-contact-title" : "contact-title");
 
   return (
     <section
       className={`contact-cta ${compact ? "contact-cta--compact" : ""}`}
       id={compact ? undefined : "contact"}
-      aria-labelledby={titleId}
-      data-section
+      aria-labelledby={resolvedTitleId}
+      data-section={compact ? undefined : true}
     >
-      <img className="contact-wave" src="/assets/waves.svg" alt="" aria-hidden="true" />
+      <img className="contact-wave" src="/assets/contact-wave.svg" alt="" aria-hidden="true" />
       <div className="contact-inner">
-        <h2 id={titleId}>Lets collaborate on your next big project!</h2>
+        <h2 id={resolvedTitleId}>Lets collaborate on your next big project!</h2>
         <ContactGroup title="Where I respond the fastest" links={primaryLinks} />
         <ContactGroup title="Other places where I also exist" links={secondaryLinks} />
       </div>

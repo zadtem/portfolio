@@ -56,6 +56,7 @@ type TidbitCardBase = {
 export type TidbitPinterestCard = TidbitCardBase & {
   kind: "pinterest";
   boardUrl: string;
+  rssUrl: string;
   boardDescription: string;
 };
 
@@ -92,13 +93,22 @@ export type TidbitCard =
   | TidbitPromoCard
   | TidbitVisualCard;
 
-export type CaseStudy = {
+type CaseStudyBase = {
   id: string;
   title: string;
   company: string;
   role: string;
   subtitle: string;
   intro: string;
+  testimonial: {
+    quote: string;
+    author: string;
+    role: string;
+  };
+};
+
+export type AudienceCaseStudy = CaseStudyBase & {
+  layout: "audience";
   heroImage: string;
   steps: Array<{
     title: string;
@@ -111,11 +121,30 @@ export type CaseStudy = {
     href: string;
     media: string[];
   }>;
-  testimonial: {
-    quote: string;
-    author: string;
-    role: string;
+};
+
+export type BrainbiteCaseStudy = CaseStudyBase & {
+  layout: "brainbite";
+  heroImage: string;
+  problem: string[];
+  solution: string;
+  gamifiedMedia: string[];
+  gamifiedVideo: string;
+  mascot: {
+    src: string;
+    stateMachine: string;
+    inputName: string;
   };
+};
+
+export type CaseStudy = AudienceCaseStudy | BrainbiteCaseStudy;
+
+export type HomeTestimonial = {
+  id: string;
+  caseStudyId?: string;
+  quote: string;
+  author: string;
+  role: string;
 };
 
 export const projects: ProjectCard[] = [
@@ -141,7 +170,8 @@ export const projects: ProjectCard[] = [
     role: "Senior interaction designer",
     summary:
       "How we made brainbite's web and mobile apps come alive with Rive animations and gamification.",
-    status: "coming-soon",
+    status: "case-study",
+    caseStudyId: "brainbite",
     variant: "phone",
     assets: {
       phone: "/assets/brainbite-phone.png",
@@ -275,6 +305,7 @@ export const tidbits: TidbitCard[] = [
     eyebrow: "Pinterest",
     tone: "pink",
     boardUrl: "https://www.pinterest.com/meursaultfrommerkato/kitty-mechanic/",
+    rssUrl: "https://www.pinterest.com/meursaultfrommerkato/kitty-mechanic.rss",
     boardDescription: "Cars, details, and the people who love them."
   },
   {
@@ -299,6 +330,7 @@ export const tidbits: TidbitCard[] = [
     eyebrow: "Pinterest",
     tone: "green",
     boardUrl: "https://www.pinterest.com/meursaultfrommerkato/it-moves/",
+    rssUrl: "https://www.pinterest.com/meursaultfrommerkato/it-moves.rss",
     boardDescription: "Looping videos, smooth motion, hypnotic things."
   },
   {
@@ -325,6 +357,8 @@ export const tidbits: TidbitCard[] = [
     tone: "soft",
     boardUrl:
       "https://www.pinterest.com/meursaultfrommerkato/the-design-is-very-human/",
+    rssUrl:
+      "https://www.pinterest.com/meursaultfrommerkato/the-design-is-very-human.rss",
     boardDescription: "Industrial design that starts with how things feel."
   },
   {
@@ -339,6 +373,7 @@ export const tidbits: TidbitCard[] = [
 export const caseStudies: CaseStudy[] = [
   {
     id: "projetsolaire",
+    layout: "audience",
     title: "How do you market a vertical SaaS?",
     company: "Projetsolaire",
     role: "Lead product designer",
@@ -395,7 +430,79 @@ export const caseStudies: CaseStudy[] = [
       quote:
         "Temesgen is a talented and creative designer who contributed significantly to our projects. He consistently produced clean, modern, and user-focused designs while being reliable and easy to work with throughout the development process. He has a strong understanding of UI/UX principles, branding, and product design, and was able to quickly adapt to changing requirements and feedback. His work helped improve the overall quality and professionalism of our products. I would confidently recommend Temesgen for design roles involving product design, UI/UX, and digital experiences.",
       author: "Maarten Elgar",
-      role: "CTO and co-founder, Projetsolaire"
+      role: "Projetsolaire, CTO and co-founder"
     }
+  },
+  {
+    id: "brainbite",
+    layout: "brainbite",
+    title: "We can all (some what) build apps now. What's next?",
+    company: "Brainbite",
+    role: "Senior Interaction Designer",
+    subtitle:
+      "How we made brainbite's web and mobile apps come alive with Rive animations and gamification",
+    intro:
+      "Initially, the Brainbite app was largely static, with non-performant, low quality GIF animations sprinkled here and there. In addition, at that time, multiple studies were coming out emphasizing the role that interaction plays in digital learning.\n\nIt was evident that we desperately needed tooling that allows us to:\n1. Ship interactive, performant and production ready animations\n2. Build features centered around interactive learning.",
+    heroImage: "/assets/brainbite-hero.png",
+    problem: [
+      "Animation and gamification drives motivation, ergo, learning",
+      "Traditional tooling has high learning and implementation curve, has performance cost too."
+    ],
+    solution:
+      "Rive allows you to build production ready, state machine (logic) driven animation with minimal code, other than declaration. We did this in two layers",
+    gamifiedMedia: [
+      "/assets/brainbite-phone.png",
+      "/assets/brainbite-game-battle.png",
+      "/assets/brainbite-game-choice.png",
+      "/assets/brainbite-game-progress.png"
+    ],
+    gamifiedVideo: "/assets/brainbite-highscore.mp4",
+    mascot: {
+      src: "/assets/steveirwin.riv",
+      stateMachine: "IdleTalkingLogic",
+      inputName: "isTalking"
+    },
+    testimonial: {
+      quote:
+        "Tem is one of a kind and did an amazing Job in BrainBite and we hope to work still with him for much longer.",
+      author: "Sayed Shahidi",
+      role: "Brainbite, CEO and Founder"
+    }
+  }
+];
+
+export const homeTestimonials: HomeTestimonial[] = [
+  ...caseStudies.map((caseStudy) => ({
+    id: caseStudy.id,
+    caseStudyId: caseStudy.id,
+    ...caseStudy.testimonial
+  })),
+  {
+    id: "exambuddy",
+    author: "Mohammed Ibrahim",
+    role: "Exambuddy, Founder",
+    quote:
+      "Been a client of Temesgen for a while and I've gotta say he always delivers quick and understands what we need in depth. He always makes sure to understand the problem first and provide a solution we haven't really thought of before. When anyone asks me for a logo and branding design he's the first person I go to."
+  },
+  {
+    id: "alza",
+    author: "Elshaday Haile",
+    role: "ALZA Global Solutions, Founder",
+    quote:
+      "Temesgen was such a pleasure to work with during the branding process for ALZA Global Solutions. He handled our brand guidelines from start to finish and made everything easy. He always came prepared with great ideas, clear options, and thoughtful suggestions. He listened to what we wanted and brought it together in a clean, professional, and beautiful way. Everything he delivered was on time, on point, and exactly what we needed, and the pricing was very fair. He was patient, reliable, and genuinely good at what he does. I'd 100% recommend him to anyone looking for branding or design work."
+  },
+  {
+    id: "zare-innovations",
+    author: "Michael Wondimu",
+    role: "Zare Innovations, Co-founder",
+    quote:
+      "I had the pleasure of working with Temesgen Ayele, and I was consistently impressed by his creativity, professionalism, and design skills. He's a reliable graphic designer with a great eye for detail and a strong work ethic. I highly recommend him for any design-related role."
+  },
+  {
+    id: "brainbite-design-lead",
+    author: "D Hendrik Mulyana",
+    role: "Brainbite, Design lead",
+    quote:
+      "I had the pleasure of working with Tem for the past eight months, and I am continually impressed by his exceptional talent and expertise, particularly in Rive application and UI/UX design. Tem possesses a deep understanding of Rive's capabilities and consistently delivers innovative, visually stunning, and highly functional designs that elevate user experiences.\n\nHis ability to seamlessly integrate creativity with technical precision sets him apart. Tem not only excels in crafting dynamic animations and interactions but also demonstrates a keen eye for detail and a strong commitment to user-centric design principles. His collaborative approach and problem-solving mindset make him an invaluable asset to any team.\n\nI wholeheartedly recommend Tem to anyone seeking a skilled professional in Rive and UI/UX design. His passion for his craft and dedication to excellence are truly inspiring."
   }
 ];

@@ -324,7 +324,7 @@ button {
   gap: 17px 16px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(4, 405.5px);
-  overflow: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -340,10 +340,12 @@ button {
   z-index: 1;
 }
 
-.work-grid:has(.project-card:hover) .project-card:not(:hover),
-.work-grid:has(.project-card.is-active) .project-card:not(.is-active) {
-  filter: blur(4px);
-  opacity: 0.2;
+@media (min-width: 1101px) and (hover: hover) and (pointer: fine) {
+  .work-grid:has(.project-card:hover) .project-card:not(:hover),
+  .work-grid:has(.project-card.is-active) .project-card:not(.is-active) {
+    filter: blur(4px);
+    opacity: 0.2;
+  }
 }
 
 .project-card--case-study {
@@ -809,11 +811,16 @@ button {
 }
 
 .tidbits-section {
+  --tidbits-shadow-gutter: min(43px, var(--page-gutter));
   align-items: flex-start;
   display: flex;
   flex-direction: column;
   gap: 36px;
-  overflow: hidden;
+  margin-inline: calc(-1 * var(--tidbits-shadow-gutter));
+  max-width: calc(var(--content-max) + var(--tidbits-shadow-gutter) + var(--tidbits-shadow-gutter));
+  overflow-x: clip;
+  padding-inline: var(--tidbits-shadow-gutter);
+  width: calc(100% + var(--tidbits-shadow-gutter) + var(--tidbits-shadow-gutter));
 }
 
 .tidbits-header {
@@ -1044,12 +1051,13 @@ button {
 }
 
 .contact-wave {
-  height: 742px;
-  left: calc(50% - 692px);
+  height: 919px;
+  left: calc(50% + 120px);
   max-width: none;
   position: absolute;
-  top: -361px;
-  width: 1383px;
+  top: -560px;
+  transform: rotate(19.9deg);
+  width: 905px;
 }
 
 .contact-inner {
@@ -1296,6 +1304,154 @@ button {
   height: 604px;
 }
 
+.case-study--brainbite .case-intro {
+  overflow: hidden;
+}
+
+.case-study--brainbite .case-intro-copy {
+  flex: 0 0 510px;
+}
+
+.case-study--brainbite .case-hero-phone {
+  flex: 0 0 auto;
+  height: 648px;
+  width: 1063px;
+}
+
+.case-study--brainbite .case-intro-body {
+  white-space: pre-wrap;
+}
+
+.brainbite-steps {
+  gap: 128px;
+  min-height: 300px;
+}
+
+.brainbite-section {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  max-width: 1272px;
+  width: 100%;
+}
+
+.brainbite-section-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 666px;
+  text-align: center;
+}
+
+.brainbite-section-copy p {
+  color: var(--label-secondary);
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.3;
+  margin: 0;
+  text-align: left;
+}
+
+.brainbite-gamified-media,
+.brainbite-mascot-media {
+  align-items: center;
+  background: var(--surface-focus);
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.brainbite-gamified-media {
+  gap: 36px;
+  height: 558px;
+}
+
+.brainbite-gamified-media img,
+.brainbite-gamified-media video {
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  flex: 1 1 0;
+  height: 470px;
+  max-width: 217px;
+  min-width: 0;
+  object-fit: cover;
+  width: 217px;
+}
+
+.brainbite-mascot-media {
+  height: 604px;
+}
+
+.brainbite-mascot-section {
+  align-items: stretch;
+  background: var(--surface-focus);
+  border-radius: 24px;
+  flex-direction: row;
+  gap: 0;
+  min-height: 604px;
+  overflow: hidden;
+}
+
+.brainbite-mascot-section .brainbite-mascot-media {
+  background: transparent;
+  border-radius: 0;
+  flex: 0 0 50%;
+  width: 50%;
+}
+
+.brainbite-mascot-section .brainbite-section-copy {
+  align-self: center;
+  flex: 0 0 50%;
+  max-width: none;
+  padding: 48px;
+  text-align: left;
+}
+
+.rive-mascot-demo {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rive-mascot-canvas {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  height: 400px;
+  overflow: hidden;
+  width: 415px;
+}
+
+.rive-mascot-canvas canvas {
+  height: 100%;
+  width: 100%;
+}
+
+.rive-mascot-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.rive-state-button {
+  background: #ffffff;
+  border: 1px solid rgba(80, 80, 80, 0.7);
+  border-radius: 999px;
+  color: var(--label-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1;
+  padding: 10px 16px;
+}
+
+.rive-state-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .case-footer {
   align-items: flex-start;
   align-self: center;
@@ -1315,13 +1471,19 @@ button {
 .case-footer .contact-cta {
   background: transparent;
   border-radius: 0;
-  height: 342px;
+  height: 348px;
   overflow: visible;
 }
 
-.case-footer .contact-wave,
+.case-footer .contact-wave {
+  left: 490px;
+  top: -570px;
+}
+
 .case-footer .off-top-link {
-  display: none;
+  bottom: -28px;
+  left: 0;
+  transform: none;
 }
 
 .case-footer .contact-inner {
@@ -1358,6 +1520,46 @@ button {
 
 .case-footer strong {
   color: var(--label-secondary);
+}
+
+.home-case-footer {
+  min-height: 686px;
+}
+
+.home-testimonial-panel {
+  display: flex;
+  flex: 0 0 462px;
+  flex-direction: column;
+  height: 462px;
+  justify-content: space-between;
+}
+
+.home-testimonial-panel blockquote {
+  flex: 0 0 400px;
+  height: 400px;
+}
+
+.home-testimonial-actions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.home-testimonial-actions button {
+  background: #ffffff;
+  border: 1px solid rgba(80, 80, 80, 0.7);
+  border-radius: 999px;
+  color: var(--label-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1;
+  padding: 10px 16px;
+}
+
+.home-testimonial-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 @media (max-width: 1100px) {
@@ -1468,6 +1670,55 @@ button {
 
   .case-step {
     width: auto;
+  }
+
+  .case-study--brainbite .case-intro {
+    min-height: auto;
+  }
+
+  .case-study--brainbite .case-intro-copy {
+    flex-basis: auto;
+  }
+
+  .brainbite-steps {
+    gap: 51px;
+  }
+
+  .brainbite-gamified-media {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 44px;
+  }
+
+  .brainbite-gamified-media img,
+  .brainbite-gamified-media video {
+    flex: 0 0 217px;
+    min-width: 217px;
+  }
+
+  .brainbite-mascot-section {
+    align-items: center;
+    background: transparent;
+    border-radius: 0;
+    flex-direction: column;
+    gap: 48px;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .brainbite-mascot-section .brainbite-mascot-media {
+    background: var(--surface-focus);
+    border-radius: 24px;
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .brainbite-mascot-section .brainbite-section-copy {
+    flex-basis: auto;
+    max-width: 666px;
+    order: -1;
+    padding: 0;
+    text-align: center;
   }
 }
 
@@ -1817,6 +2068,10 @@ button {
     display: none;
   }
 
+  .case-study--brainbite .case-intro {
+    min-height: auto;
+  }
+
   .case-steps {
     align-items: center;
     border-radius: 16px;
@@ -1879,6 +2134,50 @@ button {
     width: 329px;
   }
 
+  .brainbite-section {
+    gap: 48px;
+    max-width: 333px;
+  }
+
+  .brainbite-section-copy {
+    max-width: 291px;
+    width: 100%;
+  }
+
+  .brainbite-section-copy p {
+    font-size: 18px;
+  }
+
+  .brainbite-gamified-media {
+    border-radius: 16px;
+    height: 558px;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    width: 333px;
+  }
+
+  .brainbite-gamified-media img {
+    display: none;
+  }
+
+  .brainbite-gamified-media video {
+    flex-basis: 217px;
+    height: 470px;
+    width: 217px;
+  }
+
+  .brainbite-mascot-media {
+    border-radius: 16px;
+    height: 444px;
+    width: 333px;
+  }
+
+  .rive-mascot-canvas {
+    height: 331px;
+    width: 329px;
+  }
+
   .case-footer {
     border-radius: 0;
     display: flex;
@@ -1894,6 +2193,11 @@ button {
     width: 305px;
   }
 
+  .case-footer .contact-wave {
+    left: -330px;
+    top: -570px;
+  }
+
   .case-footer .contact-inner,
   .case-footer .contact-group {
     align-items: center;
@@ -1907,6 +2211,23 @@ button {
 
   .case-footer blockquote p {
     font-size: 18px;
+  }
+
+  .home-case-footer {
+    gap: 64px;
+    min-height: 1914px;
+  }
+
+  .home-testimonial-panel {
+    align-self: center;
+    flex-basis: 1404px;
+    height: 1404px;
+    width: 252px;
+  }
+
+  .home-testimonial-panel blockquote {
+    flex-basis: 1338px;
+    height: 1338px;
   }
 }
 

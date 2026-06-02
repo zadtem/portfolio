@@ -12,8 +12,7 @@ const imageCache = new Map<string, { expiresAt: number; items: PinterestImage[] 
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const boardUrl = searchParams.get("boardUrl")?.trim();
-  const rssUrl = getPinterestRssUrl(boardUrl);
+  const rssUrl = getPinterestRssUrl(searchParams.get("rssUrl")?.trim());
 
   if (!rssUrl) {
     return NextResponse.json({ items: [] }, { status: 400 });
@@ -35,6 +34,8 @@ export async function GET(request: Request) {
 }
 
 async function fetchPinterestRssImages(rssUrl: string) {
+  const boardUrl = getPinterestBoardUrl(rssUrl);
+
   try {
     const response = await fetch(rssUrl, {
       headers: {
@@ -46,10 +47,33 @@ async function fetchPinterestRssImages(rssUrl: string) {
     });
 
     if (!response.ok) {
+      return fetchPinterestBoardImages(boardUrl);
+    }
+
+    const items = parsePinterestRss(await response.text());
+
+    return items.length ? items : fetchPinterestBoardImages(boardUrl);
+  } catch {
+    return fetchPinterestBoardImages(boardUrl);
+  }
+}
+
+async function fetchPinterestBoardImages(boardUrl: string) {
+  try {
+    const response = await fetch(boardUrl, {
+      headers: {
+        Accept: "text/html",
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
+      },
+      next: { revalidate: 3600 }
+    });
+
+    if (!response.ok) {
       return [];
     }
 
-    return parsePinterestRss(await response.text());
+    return parsePinterestBoardImages(await response.text(), boardUrl);
   } catch {
     return [];
   }
@@ -88,29 +112,46 @@ function readDescriptionImageUrl(description: string) {
   return description.match(/<img\b[^>]*\bsrc=["']([^"']+)["']/i)?.[1] ?? "";
 }
 
-function getPinterestRssUrl(boardUrl: string | undefined) {
-  if (!boardUrl) {
+function parsePinterestBoardImages(html: string, boardUrl: string) {
+  const matches = html.matchAll(
+    /https:\/\/i\.pinimg\.com\/(?:200x150|200x|236x|474x)\/[a-f0-9/]+\.(?:jpg|jpeg|png|webp)/gi
+  );
+  const imageUrls = Array.from(matches, ([imageUrl]) => normalizePinterestImageUrl(imageUrl));
+
+  return Array.from(new Set(imageUrls)).map((imageUrl) => ({
+    id: imageUrl,
+    imageUrl,
+    alt: "Pinterest board image",
+    link: boardUrl
+  }));
+}
+
+function getPinterestRssUrl(rssUrl: string | undefined) {
+  if (!rssUrl) {
     return null;
   }
 
   try {
-    const url = new URL(boardUrl);
+    const url = new URL(rssUrl);
     const hostname = url.hostname.toLowerCase();
+    const pathParts = url.pathname.split("/").filter(Boolean);
 
-    if (hostname !== "pinterest.com" && hostname !== "www.pinterest.com") {
+    if (
+      (hostname !== "pinterest.com" && hostname !== "www.pinterest.com") ||
+      pathParts.length !== 2 ||
+      !pathParts[1].endsWith(".rss")
+    ) {
       return null;
     }
 
-    const [username, boardSlug] = url.pathname.split("/").filter(Boolean);
-
-    if (!username || !boardSlug) {
-      return null;
-    }
-
-    return `https://www.pinterest.com/${username}/${boardSlug}.rss`;
+    return `https://www.pinterest.com/${pathParts[0]}/${pathParts[1]}`;
   } catch {
     return null;
   }
+}
+
+function getPinterestBoardUrl(rssUrl: string) {
+  return rssUrl.replace(/\.rss$/, "/");
 }
 
 function normalizePinterestImageUrl(url: string) {
