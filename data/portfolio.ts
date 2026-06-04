@@ -33,6 +33,14 @@ export type ExperienceItem = {
   dates: string;
 };
 
+export type Testimonial = {
+  id: string;
+  author: string;
+  role: string;
+  quote: string;
+  caseStudyId?: string;
+};
+
 export type ToolLogo = {
   name: string;
   src: string;
@@ -138,14 +146,6 @@ export type BrainbiteCaseStudy = CaseStudyBase & {
 };
 
 export type CaseStudy = AudienceCaseStudy | BrainbiteCaseStudy;
-
-export type HomeTestimonial = {
-  id: string;
-  caseStudyId?: string;
-  quote: string;
-  author: string;
-  role: string;
-};
 
 export const projects: ProjectCard[] = [
   {
@@ -255,6 +255,54 @@ export const tools: ToolLogo[] = [
   { name: "Framer", src: "/assets/tool-framer.png" },
   { name: "Illustrator", src: "/assets/tool-illustrator.png" },
   { name: "After Effects", src: "/assets/tool-aftereffects.png" }
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    id: "maarten-elgar",
+    author: "Maarten Elgar",
+    role: "Projetsolaire, CTO and co-founder",
+    caseStudyId: "projetsolaire",
+    quote:
+      "Temesgen is a talented and creative designer who contributed significantly to our projects. He consistently produced clean, modern, and user-focused designs while being reliable and easy to work with throughout the development process. He has a strong understanding of UI/UX principles, branding, and product design, and was able to quickly adapt to changing requirements and feedback. His work helped improve the overall quality and professionalism of our products. I would confidently recommend Temesgen for design roles involving product design, UI/UX, and digital experiences."
+  },
+  {
+    id: "sayed-shahidi",
+    author: "Sayed Shahidi",
+    role: "Brainbite, CEO and Founder",
+    caseStudyId: "brainbite",
+    quote:
+      "Tem is one of a kind and did an amazing Job in BrainBite and we hope to work still with him for much longer."
+  },
+  {
+    id: "mohammed-ibrahim",
+    author: "Mohammed Ibrahim",
+    role: "Exambuddy, Founder",
+    quote:
+      "Been a client of Temesgen for a while and I've gotta say he always delivers quick and understands what we need in depth. He always makes sure to understand the problem first and provide a solution we haven't really thought of before. When anyone asks me for a logo and branding design he's the first person I go to."
+  },
+  {
+    id: "elshaday-haile",
+    author: "Elshaday Haile",
+    role: "ALZA Global Solutions, Founder",
+    quote:
+      "Temesgen was such a pleasure to work with during the branding process for ALZA Global Solutions. He handled our brand guidelines from start to finish, and honestly, he made everything so easy. Every time we had a meeting - whether it was quick or part of our regular weekly/biweekly check-ins - he always came prepared with great ideas, clear options, and thoughtful suggestions.\n\nHe really listened to what we wanted, and he found a way to bring all of it together in a clean, professional, and beautiful way. Everything he delivered was on time, on point, and exactly what we needed - and the pricing was very fair too.\n\nWhat I appreciated most is that he never overcomplicated things. He was patient, reliable, and just genuinely good at what he does. I'd 100% recommend him to anyone looking for branding or design work. He's someone you'll be happy to have on your team."
+  },
+  {
+    id: "michael-wondimu",
+    author: "Michael Wondimu",
+    role: "Zare Innovations, Co-founder",
+    quote:
+      "I had the pleasure of working with Temesgen Ayele, and I was consistently impressed by his creativity, professionalism, and design skills. He's a reliable graphic designer with a great eye for detail and a strong work ethic. I highly recommend him for any design-related role."
+  },
+  {
+    id: "hendrik-mulyana",
+    author: "D Hendrik Mulyana",
+    role: "Brainbite, Design lead",
+    caseStudyId: "brainbite",
+    quote:
+      "I had the pleasure of working with Tem for the past eight months, and I am continually impressed by his exceptional talent and expertise, particularly in Rive application and UI/UX design. Tem possesses a deep understanding of Rive's capabilities and consistently delivers innovative, visually stunning, and highly functional designs that elevate user experiences.\n\nHis ability to seamlessly integrate creativity with technical precision sets him apart. Tem not only excels in crafting dynamic animations and interactions but also demonstrates a keen eye for detail and a strong commitment to user-centric design principles. His collaborative approach and problem-solving mindset make him an invaluable asset to any team.\n\nI wholeheartedly recommend Tem to anyone seeking a skilled professional in Rive and UI/UX design. His passion for his craft and dedication to excellence are truly inspiring."
+  }
 ];
 
 export const contactLinks: ContactLink[] = [
@@ -468,41 +516,5 @@ export const caseStudies: CaseStudy[] = [
       author: "Sayed Shahidi",
       role: "Brainbite, CEO and Founder"
     }
-  }
-];
-
-export const homeTestimonials: HomeTestimonial[] = [
-  ...caseStudies.map((caseStudy) => ({
-    id: caseStudy.id,
-    caseStudyId: caseStudy.id,
-    ...caseStudy.testimonial
-  })),
-  {
-    id: "exambuddy",
-    author: "Mohammed Ibrahim",
-    role: "Exambuddy, Founder",
-    quote:
-      "Been a client of Temesgen for a while and I've gotta say he always delivers quick and understands what we need in depth. He always makes sure to understand the problem first and provide a solution we haven't really thought of before. When anyone asks me for a logo and branding design he's the first person I go to."
-  },
-  {
-    id: "alza",
-    author: "Elshaday Haile",
-    role: "ALZA Global Solutions, Founder",
-    quote:
-      "Temesgen was such a pleasure to work with during the branding process for ALZA Global Solutions. He handled our brand guidelines from start to finish and made everything easy. He always came prepared with great ideas, clear options, and thoughtful suggestions. He listened to what we wanted and brought it together in a clean, professional, and beautiful way. Everything he delivered was on time, on point, and exactly what we needed, and the pricing was very fair. He was patient, reliable, and genuinely good at what he does. I'd 100% recommend him to anyone looking for branding or design work."
-  },
-  {
-    id: "zare-innovations",
-    author: "Michael Wondimu",
-    role: "Zare Innovations, Co-founder",
-    quote:
-      "I had the pleasure of working with Temesgen Ayele, and I was consistently impressed by his creativity, professionalism, and design skills. He's a reliable graphic designer with a great eye for detail and a strong work ethic. I highly recommend him for any design-related role."
-  },
-  {
-    id: "brainbite-design-lead",
-    author: "D Hendrik Mulyana",
-    role: "Brainbite, Design lead",
-    quote:
-      "I had the pleasure of working with Tem for the past eight months, and I am continually impressed by his exceptional talent and expertise, particularly in Rive application and UI/UX design. Tem possesses a deep understanding of Rive's capabilities and consistently delivers innovative, visually stunning, and highly functional designs that elevate user experiences.\n\nHis ability to seamlessly integrate creativity with technical precision sets him apart. Tem not only excels in crafting dynamic animations and interactions but also demonstrates a keen eye for detail and a strong commitment to user-centric design principles. His collaborative approach and problem-solving mindset make him an invaluable asset to any team.\n\nI wholeheartedly recommend Tem to anyone seeking a skilled professional in Rive and UI/UX design. His passion for his craft and dedication to excellence are truly inspiring."
   }
 ];

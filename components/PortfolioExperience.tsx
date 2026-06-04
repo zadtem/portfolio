@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AboutSection from "@/components/AboutSection";
 import CaseStudyOverlay from "@/components/CaseStudyOverlay";
+import ContactCTA from "@/components/ContactCTA";
 import Header from "@/components/Header";
-import HomeContactCTA from "@/components/HomeContactCTA";
 import SmoothScrollController from "@/components/SmoothScrollController";
+import TestimonialSection from "@/components/TestimonialSection";
 import TidbitsSection from "@/components/TidbitsSection";
 import WorkGrid from "@/components/WorkGrid";
 import { caseStudies } from "@/data/portfolio";
@@ -134,8 +135,9 @@ export default function PortfolioExperience() {
       <main className="page-shell" id="top" ref={shellRef}>
         <WorkGrid onOpenProject={openProject} />
         <AboutSection />
+        <TestimonialSection onOpenProject={openProject} />
         <TidbitsSection />
-        <HomeContactCTA onOpenProject={openProject} />
+        <ContactCTA />
       </main>
       <CaseStudyOverlay caseStudy={activeCaseStudy} onClose={closeProject} />
     </>
