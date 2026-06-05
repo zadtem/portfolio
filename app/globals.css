@@ -1701,6 +1701,12 @@ button {
   align-items: flex-start;
 }
 
+.case-footer__testimonials {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
 .case-footer blockquote {
   font-family: var(--font-display);
   margin: 0;

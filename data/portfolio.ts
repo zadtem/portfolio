@@ -41,6 +41,12 @@ export type Testimonial = {
   caseStudyId?: string;
 };
 
+type CaseStudyTestimonial = {
+  quote: string;
+  author: string;
+  role: string;
+};
+
 export type ToolLogo = {
   name: string;
   src: string;
@@ -108,11 +114,7 @@ type CaseStudyBase = {
   role: string;
   subtitle: string;
   intro: string;
-  testimonial: {
-    quote: string;
-    author: string;
-    role: string;
-  };
+  testimonial: CaseStudyTestimonial | CaseStudyTestimonial[];
 };
 
 export type AudienceCaseStudy = CaseStudyBase & {
@@ -510,11 +512,19 @@ export const caseStudies: CaseStudy[] = [
       stateMachine: "IdleTalkingLogic",
       inputName: "isTalking"
     },
-    testimonial: {
-      quote:
-        "Tem is one of a kind and did an amazing Job in BrainBite and we hope to work still with him for much longer.",
-      author: "Sayed Shahidi",
-      role: "Brainbite, CEO and Founder"
-    }
+    testimonial: [
+      {
+        quote:
+          "Tem is one of a kind and did an amazing Job in BrainBite and we hope to work still with him for much longer.",
+        author: "Sayed Shahidi",
+        role: "Brainbite, CEO and Founder"
+      },
+      {
+        quote:
+          "Tem's expertise in Rive and UI/UX design consistently stood out during our eight months working together. He turns complex animation and interaction ideas into polished, production-ready experiences with strong visual craft, technical precision, and a clear focus on users.\n\nHis collaborative approach, attention to detail, and problem-solving mindset made him an invaluable part of the team. I wholeheartedly recommend Tem to anyone looking for a skilled Rive and UI/UX designer.",
+        author: "D Hendrik Mulyana",
+        role: "Brainbite, Design lead"
+      }
+    ]
   }
 ];

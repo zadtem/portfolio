@@ -240,16 +240,24 @@ function BrainbiteSectionCopy({ title, body }: { title: string; body: string }) 
 }
 
 function CaseStudyFooter({ caseStudy }: { caseStudy: CaseStudy }) {
+  const testimonials = Array.isArray(caseStudy.testimonial)
+    ? caseStudy.testimonial
+    : [caseStudy.testimonial];
+
   return (
     <section className="case-footer">
       <ContactCTA compact titleId={`${caseStudy.id}-case-contact-title`} />
-      <blockquote>
-        <p>&quot;{caseStudy.testimonial.quote}&quot;</p>
-        <footer>
-          <strong>{caseStudy.testimonial.author}</strong>
-          <span>{caseStudy.testimonial.role}</span>
-        </footer>
-      </blockquote>
+      <div className="case-footer__testimonials">
+        {testimonials.map((testimonial) => (
+          <blockquote key={`${testimonial.author}-${testimonial.role}`}>
+            <p>&quot;{testimonial.quote}&quot;</p>
+            <footer>
+              <strong>{testimonial.author}</strong>
+              <span>{testimonial.role}</span>
+            </footer>
+          </blockquote>
+        ))}
+      </div>
     </section>
   );
 }
