@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource/dm-sans": "^5.2.8",
     "@fontsource/faculty-glyphic": "latest",
     "@fontsource/inter": "latest",
     "@fontsource/manrope": "latest",

@@ -8,14 +8,14 @@ export default function NotFound() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const duration = 5000;
+    const duration = 1800;
     const start = performance.now();
     let frameId: number;
 
     function tick(now: number) {
       const elapsed = now - start;
       const t = Math.min(elapsed / duration, 1);
-      const eased = t * t * t; // cubic ease-in
+      const eased = 1 - Math.pow(1 - t, 3);
       setCount(Math.round(eased * 404));
       if (t < 1) {
         frameId = requestAnimationFrame(tick);

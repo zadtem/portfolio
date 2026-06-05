@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 const navItems = [
   { label: "Work", href: "#work" },
@@ -28,20 +29,49 @@ async function copyText(value: string) {
   document.body.removeChild(textarea);
 }
 
-export default function Header() {
+type HeaderProps = {
+  revealEnabled?: boolean;
+};
+
+export default function Header({ revealEnabled = true }: HeaderProps) {
+  const prefersReducedMotion = useReducedMotion();
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
-  const [toastKey, setToastKey] = useState(0);
+  const [copyKey, setCopyKey] = useState(0);
+  const navRevealVariants = useMemo<Variants>(
+    () => ({
+      hidden: prefersReducedMotion
+        ? { opacity: 0 }
+        : { opacity: 0, scale: 1.34, x: 320 },
+      visible: (itemIndex: number) =>
+        prefersReducedMotion
+          ? {
+              opacity: 1,
+              transition: { duration: 0.16 }
+            }
+          : {
+              opacity: 1,
+              scale: 1,
+              transition: {
+                delay: itemIndex * 0.09,
+                duration: 1.08,
+                ease: [0.16, 1, 0.3, 1]
+              },
+              x: 0
+            }
+    }),
+    [prefersReducedMotion]
+  );
 
   useEffect(() => {
     if (copyState === "idle") return;
 
     const timeout = window.setTimeout(() => setCopyState("idle"), 1900);
     return () => window.clearTimeout(timeout);
-  }, [copyState, toastKey]);
+  }, [copyState, copyKey]);
 
   const showCopyState = (state: "copied" | "failed") => {
     setCopyState(state);
-    setToastKey((currentKey) => currentKey + 1);
+    setCopyKey((currentKey) => currentKey + 1);
   };
 
   const handleCopy = async () => {
@@ -55,27 +85,29 @@ export default function Header() {
 
   return (
     <header className="site-header" aria-label="Primary">
-      <button
+      <motion.button
         className={`brand brand-copy${copyState === "copied" ? " is-copied" : ""}${
           copyState === "failed" ? " is-failed" : ""
         }`}
+        custom={0}
+        initial="hidden"
+        animate={revealEnabled ? "visible" : "hidden"}
+        variants={navRevealVariants}
         type="button"
         aria-label="Copy website link: tem.works"
         onClick={handleCopy}
       >
-        <span className="brand-copy__text">Temesgen Mamo</span>
-        <span className="brand-copy__hint" aria-hidden="true">
-          {copyState === "copied"
-            ? "Copied tem.works"
-            : copyState === "failed"
-              ? "Copy failed"
-              : "Copy tem.works"}
+        <span key={copyKey} className="brand-copy__label" aria-hidden="true">
+          <span className="brand-copy__text">Temesgen Mamo</span>
+          <span className="brand-copy__message">
+            {copyState === "failed" ? "copy failed" : "link copied"}
+          </span>
         </span>
-      </button>
+      </motion.button>
       {copyState !== "idle" ? (
         <span
-          key={toastKey}
-          className={`copy-toast${copyState === "failed" ? " is-failed" : ""}`}
+          key={`status-${copyKey}`}
+          className="sr-only"
           role="status"
           aria-live="polite"
           aria-atomic="true"
@@ -84,14 +116,18 @@ export default function Header() {
         </span>
       ) : null}
       <nav className="nav-links" aria-label="Portfolio sections">
-        {navItems.map((item) => (
-          <a
+        {navItems.map((item, index) => (
+          <motion.a
             key={item.href}
             className={item.accent ? "nav-link--accent" : undefined}
+            custom={index + 1}
+            initial="hidden"
+            animate={revealEnabled ? "visible" : "hidden"}
+            variants={navRevealVariants}
             href={item.href}
           >
             {item.label}
-          </a>
+          </motion.a>
         ))}
       </nav>
     </header>

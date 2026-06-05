@@ -20,6 +20,10 @@ const SPAWN_MAX = 2200;
 // Colors
 const DINO_CLR = "#f77916";
 const WORLD_CLR = "#535353";
+const SCORE_FONT = '700 12px "Manrope", sans-serif';
+const MESSAGE_FONT = '400 13px "Faculty Glyphic", Georgia, serif';
+const GAME_OVER_FONT = '400 14px "Faculty Glyphic", Georgia, serif';
+const RESTART_FONT = '400 12px "Manrope", sans-serif';
 
 // ─── Sprite Definitions ────────────────────────────────────
 // '#' = filled, '.' = empty, 'X' = eye (white)
@@ -359,7 +363,7 @@ export default function DinoGame() {
       // Score
       if (s.phase !== "idle") {
         ctx.fillStyle = WORLD_CLR;
-        ctx.font = "bold 12px monospace";
+        ctx.font = SCORE_FONT;
         ctx.textAlign = "right";
         ctx.fillText(
           String(Math.floor(s.score)).padStart(5, "0"),
@@ -372,13 +376,13 @@ export default function DinoGame() {
       ctx.textAlign = "center";
       if (s.phase === "idle") {
         ctx.fillStyle = WORLD_CLR;
-        ctx.font = "13px sans-serif";
+        ctx.font = MESSAGE_FONT;
         ctx.fillText("Press Space or Tap to Start", W / 2, 30);
       } else if (s.phase === "dead") {
         ctx.fillStyle = WORLD_CLR;
-        ctx.font = "bold 14px sans-serif";
+        ctx.font = GAME_OVER_FONT;
         ctx.fillText("G A M E  O V E R", W / 2, 40);
-        ctx.font = "12px sans-serif";
+        ctx.font = RESTART_FONT;
         ctx.fillText("Tap or press Space to restart", W / 2, 58);
       }
 

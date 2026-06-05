@@ -9,12 +9,20 @@ import type { MarketplaceSequenceItem, ProjectCard as ProjectCardType } from "@/
 type ProjectCardProps = {
   index: number;
   project: ProjectCardType;
+  revealEnabled: boolean;
+  revealMotion?: "animated" | "static";
   onOpenProject: (projectId: string) => void;
 };
 
 const cardRevealViewport = { once: true, amount: 0.05 } as const;
 
-export default function ProjectCard({ index, project, onOpenProject }: ProjectCardProps) {
+export default function ProjectCard({
+  index,
+  project,
+  revealEnabled,
+  revealMotion = "animated",
+  onOpenProject
+}: ProjectCardProps) {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const [isPointerActive, setIsPointerActive] = useState(false);
@@ -32,11 +40,15 @@ export default function ProjectCard({ index, project, onOpenProject }: ProjectCa
   );
   const cardRevealVariants = useMemo<Variants>(
     () => ({
-      hidden: prefersReducedMotion
+      hidden: revealMotion === "static"
+        ? { opacity: 1, scale: 1, x: 0 }
+        : prefersReducedMotion
         ? { opacity: 0 }
         : { opacity: 0, scale: 1.34, x: 320 },
       visible: (cardIndex: number) =>
-        prefersReducedMotion
+        revealMotion === "static"
+          ? { opacity: 1, scale: 1, transition: { duration: 0 }, x: 0 }
+          : prefersReducedMotion
           ? {
               opacity: 1,
               transition: { duration: 0.16 }
@@ -52,7 +64,7 @@ export default function ProjectCard({ index, project, onOpenProject }: ProjectCa
               x: 0
             }
     }),
-    [prefersReducedMotion]
+    [prefersReducedMotion, revealMotion]
   );
 
   useEffect(() => {
@@ -204,9 +216,10 @@ export default function ProjectCard({ index, project, onOpenProject }: ProjectCa
       data-project-id={project.id}
       data-touch-active={isTouchActive ? "true" : undefined}
       custom={index}
-      initial="hidden"
+      initial={revealMotion === "static" ? "visible" : "hidden"}
+      animate={revealEnabled || revealMotion === "static" ? "visible" : "hidden"}
       variants={cardRevealVariants}
-      viewport={cardRevealViewport}
+      viewport={revealEnabled && revealMotion === "animated" ? cardRevealViewport : undefined}
       role={isCardClickable ? "button" : "group"}
       tabIndex={isMobile ? undefined : 0}
       aria-label={isCaseStudy ? `Open ${project.title} case study` : `${project.title} - coming soon`}
@@ -219,7 +232,6 @@ export default function ProjectCard({ index, project, onOpenProject }: ProjectCa
       onPointerLeave={handlePointerLeave}
       onPointerMove={handlePointerMove}
       style={cardStyle}
-      whileInView="visible"
       whileHover={prefersReducedMotion || isMobile ? undefined : { y: -4 }}
       transition={{ type: "spring", stiffness: 220, damping: 24 }}
     >

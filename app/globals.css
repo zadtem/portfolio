@@ -1,4 +1,5 @@
 @import "@fontsource/faculty-glyphic/400.css";
+@import "@fontsource/dm-sans/500.css";
 @import "@fontsource/inter/400.css";
 @import "@fontsource/manrope/400.css";
 @import "@fontsource/manrope/700.css";
@@ -117,6 +118,51 @@ button {
   width: 100%;
 }
 
+.splash-screen {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: auto;
+  position: fixed;
+  z-index: 100;
+}
+
+.splash-screen--wipe {
+  background: transparent;
+}
+
+.splash-wipe-panel {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  will-change: transform;
+}
+
+.splash-wipe-panel--yellow {
+  background: #fdcc00;
+  z-index: 1;
+}
+
+.splash-wipe-panel--white {
+  background: #ffffff;
+  z-index: 2;
+}
+
+.splash-loader-logo {
+  height: clamp(132px, 17.5vw, 179px);
+  left: 50%;
+  overflow: visible;
+  position: absolute;
+  top: calc(50% - 80px);
+  translate: -50% -50%;
+  transform-origin: 50% 50%;
+  width: clamp(132px, 17.5vw, 179px);
+  will-change: opacity, transform;
+  z-index: 3;
+}
+
 .site-header {
   align-items: center;
   display: flex;
@@ -163,20 +209,7 @@ button {
 }
 
 .brand-copy::after {
-  background: var(--accent);
-  border-radius: 999px;
-  content: "";
-  height: 7px;
-  left: calc(100% + 6px);
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0.4);
-  transition:
-    opacity 180ms ease,
-    transform 220ms ease;
-  width: 7px;
-  z-index: -1;
+  content: none;
 }
 
 .brand-copy:hover::before,
@@ -186,98 +219,85 @@ button {
   transform: scaleX(1);
 }
 
-.brand-copy.is-copied::after {
-  opacity: 0.18;
-  transform: translate(-50%, -50%) scale(7);
+.brand-copy__label {
+  display: inline-grid;
+  overflow: hidden;
+  position: relative;
 }
 
-.brand-copy__text {
+.brand-copy__text,
+.brand-copy__message {
+  grid-area: 1 / 1;
   position: relative;
   z-index: 1;
 }
 
-.brand-copy__hint {
-  background: var(--label-primary);
-  border-radius: 999px;
-  color: #ffffff;
+.brand-copy__message {
+  align-self: center;
+  color: var(--accent);
   font-family: var(--font-body);
-  font-size: 12px;
-  left: calc(100% + 12px);
+  font-size: 16px;
+  font-weight: 400;
+  justify-self: center;
   line-height: 1;
   opacity: 0;
-  padding: 8px 10px;
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  transform: translate(-8px, -50%) scale(0.96);
-  transition:
-    opacity 180ms ease,
-    transform 220ms ease;
+  text-transform: lowercase;
+  transform: translateY(8px);
   white-space: nowrap;
 }
 
-.brand-copy:hover .brand-copy__hint,
-.brand-copy:focus-visible .brand-copy__hint,
-.brand-copy.is-copied .brand-copy__hint,
-.brand-copy.is-failed .brand-copy__hint {
-  opacity: 1;
-  transform: translate(0, -50%) scale(1);
+.brand-copy.is-copied .brand-copy__text,
+.brand-copy.is-failed .brand-copy__text {
+  animation: brand-name-reveal 1900ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.brand-copy.is-copied .brand-copy__hint {
-  background: var(--accent);
+.brand-copy.is-copied .brand-copy__message,
+.brand-copy.is-failed .brand-copy__message {
+  animation: brand-message-reveal 1900ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.copy-toast {
-  align-items: center;
-  animation: copy-toast-in 1900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 999px;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.1);
-  color: var(--label-primary);
-  display: inline-flex;
-  font-family: var(--font-body);
-  font-size: 12px;
-  gap: 7px;
-  left: 0;
-  line-height: 1;
-  padding: 8px 10px;
-  pointer-events: none;
-  position: absolute;
-  top: calc(100% + 14px);
-  white-space: nowrap;
-  z-index: 6;
-}
-
-.copy-toast::before {
-  background: var(--accent);
-  border-radius: 999px;
-  content: "";
-  height: 6px;
-  width: 6px;
-}
-
-.copy-toast.is-failed::before {
-  background: #c62828;
-}
-
-@keyframes copy-toast-in {
-  0% {
-    opacity: 0;
-    transform: translateY(-6px) scale(0.98);
-  }
-
-  14%,
-  82% {
+@keyframes brand-name-reveal {
+  0%,
+  23%,
+  78%,
+  100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 
+  34%,
+  66% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes brand-message-reveal {
+  0%,
+  29%,
+  72%,
   100% {
     opacity: 0;
-    transform: translateY(-4px) scale(0.99);
+    transform: translateY(8px);
   }
+
+  40%,
+  61% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .nav-links {
@@ -1901,19 +1921,6 @@ button {
     align-self: flex-start;
   }
 
-  .brand-copy__hint {
-    left: 0;
-    top: calc(100% + 12px);
-    transform: translateY(-6px) scale(0.96);
-  }
-
-  .brand-copy:hover .brand-copy__hint,
-  .brand-copy:focus-visible .brand-copy__hint,
-  .brand-copy.is-copied .brand-copy__hint,
-  .brand-copy.is-failed .brand-copy__hint {
-    transform: translateY(0) scale(1);
-  }
-
   .nav-links {
     gap: 28px;
   }
@@ -2419,6 +2426,25 @@ button {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .brand-copy.is-copied .brand-copy__text,
+  .brand-copy.is-failed .brand-copy__text {
+    animation: none !important;
+    opacity: 0;
+    transform: none;
+  }
+
+  .brand-copy.is-copied .brand-copy__message,
+  .brand-copy.is-failed .brand-copy__message {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .splash-lines p {
+    filter: none !important;
+    transform: none !important;
   }
 }
 

@@ -6,21 +6,34 @@ import CaseStudyOverlay from "@/components/CaseStudyOverlay";
 import ContactCTA from "@/components/ContactCTA";
 import Header from "@/components/Header";
 import SmoothScrollController from "@/components/SmoothScrollController";
+import SplashScreen from "@/components/SplashScreen";
 import TestimonialSection from "@/components/TestimonialSection";
 import TidbitsSection from "@/components/TidbitsSection";
 import WorkGrid from "@/components/WorkGrid";
 import { caseStudies } from "@/data/portfolio";
 
+function scrollToPageTop() {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
 export default function PortfolioExperience() {
   const shellRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [showSplash, setShowSplash] = useState(true);
+  const [homeRevealReady, setHomeRevealReady] = useState(false);
 
   useEffect(() => {
     const syncFromUrl = () => {
       const params = new URLSearchParams(window.location.search);
       const project = params.get("project");
       setActiveProjectId(project);
+      if (project) {
+        setShowSplash(false);
+        setHomeRevealReady(true);
+      }
     };
 
     syncFromUrl();
@@ -28,6 +41,23 @@ export default function PortfolioExperience() {
 
     return () => window.removeEventListener("popstate", syncFromUrl);
   }, []);
+
+  useEffect(() => {
+    if (!showSplash) return;
+
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    scrollToPageTop();
+
+    const frame = requestAnimationFrame(scrollToPageTop);
+    const timeout = window.setTimeout(scrollToPageTop, 100);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
+  }, [showSplash]);
 
   const activeCaseStudy = useMemo(
     () => caseStudies.find((caseStudy) => caseStudy.id === activeProjectId) ?? null,
@@ -127,19 +157,39 @@ export default function PortfolioExperience() {
     setActiveProjectId(null);
   }, []);
 
+  const handleSplashExitStart = useCallback(() => {
+    scrollToPageTop();
+    setHomeRevealReady(true);
+  }, []);
+
+  const handleSplashComplete = useCallback(() => {
+    scrollToPageTop();
+    setShowSplash(false);
+  }, []);
+
   return (
     <>
-      <SmoothScrollController disabled={Boolean(activeCaseStudy)} />
+      <SmoothScrollController disabled={Boolean(activeCaseStudy) || showSplash} />
       <div className="scroll-progress-rail" ref={progressRef} aria-hidden="true" />
-      <Header />
+      <Header revealEnabled={homeRevealReady} />
       <main className="page-shell" id="top" ref={shellRef}>
-        <WorkGrid onOpenProject={openProject} />
+        <WorkGrid
+          revealEnabled={homeRevealReady}
+          revealMotion="animated"
+          onOpenProject={openProject}
+        />
         <AboutSection />
         <TestimonialSection onOpenProject={openProject} />
         <TidbitsSection />
         <ContactCTA />
       </main>
       <CaseStudyOverlay caseStudy={activeCaseStudy} onClose={closeProject} />
+      {showSplash ? (
+        <SplashScreen
+          onExitStart={handleSplashExitStart}
+          onComplete={handleSplashComplete}
+        />
+      ) : null}
     </>
   );
 }

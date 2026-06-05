@@ -3,9 +3,15 @@ import { projects } from "@/data/portfolio";
 
 type WorkGridProps = {
   onOpenProject: (projectId: string) => void;
+  revealEnabled: boolean;
+  revealMotion?: "animated" | "static";
 };
 
-export default function WorkGrid({ onOpenProject }: WorkGridProps) {
+export default function WorkGrid({
+  onOpenProject,
+  revealEnabled,
+  revealMotion = "animated"
+}: WorkGridProps) {
   return (
     <section
       className="work-section"
@@ -20,6 +26,8 @@ export default function WorkGrid({ onOpenProject }: WorkGridProps) {
             key={project.id}
             index={index}
             project={project}
+            revealEnabled={revealEnabled}
+            revealMotion={revealMotion}
             onOpenProject={onOpenProject}
           />
         ))}
