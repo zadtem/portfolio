@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
+import RiveShowcase from "@/components/RiveShowcase";
 import type { AudienceCaseStudy, BrainbiteCaseStudy, CaseStudy } from "@/data/portfolio";
 import {
   buildMetadata,
@@ -170,6 +171,9 @@ function BrainbiteArticle({ caseStudy }: { caseStudy: BrainbiteCaseStudy }) {
           The work defined and animated emotions, idle states, and implementation language for
           developers importing and using Rive files.
         </p>
+        <div className="work-rive-showcase">
+          <RiveShowcase entries={caseStudy.riveShowcase} />
+        </div>
       </section>
     </>
   );

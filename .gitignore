@@ -5,3 +5,4 @@ tsconfig.tsbuildinfo
 excalidraw.log
 .vercel
 .claude/
+.commandcode/

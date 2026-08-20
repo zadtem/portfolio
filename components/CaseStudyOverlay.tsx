@@ -9,7 +9,7 @@ import {
   WarningCircle
 } from "@phosphor-icons/react/dist/ssr";
 import ContactCTA from "@/components/ContactCTA";
-import RiveMascotDemo from "@/components/RiveMascotDemo";
+import RiveShowcase from "@/components/RiveShowcase";
 import type { AudienceCaseStudy, BrainbiteCaseStudy, CaseStudy } from "@/data/portfolio";
 
 type CaseStudyOverlayProps = {
@@ -199,14 +199,14 @@ function BrainbiteContent({ caseStudy }: { caseStudy: BrainbiteCaseStudy }) {
         </div>
       </section>
 
-      <section className="brainbite-section brainbite-mascot-section">
-        <div className="brainbite-mascot-media">
-          <RiveMascotDemo {...caseStudy.mascot} />
-        </div>
+      <section className="brainbite-section brainbite-rive-showcase-section">
         <BrainbiteSectionCopy
-          title="Animation of learning mascots"
+          title="Animation of UI elements"
           body="Our approach here was to define and animate emotions, as well as idle states, and define workflow and language to be used by developers when importing and implementing the rive files"
         />
+        <div className="brainbite-rive-showcase-media">
+          <RiveShowcase entries={caseStudy.riveShowcase} />
+        </div>
       </section>
     </>
   );

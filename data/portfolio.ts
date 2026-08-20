@@ -133,6 +133,32 @@ export type AudienceCaseStudy = CaseStudyBase & {
   }>;
 };
 
+export type RiveBooleanInput = {
+  kind: "boolean";
+  name: string;
+  label?: string;
+};
+
+export type RiveTriggerInput = {
+  kind: "trigger";
+  name: string;
+  label?: string;
+  fireIcon?: boolean;
+};
+
+export type RiveInput = RiveBooleanInput | RiveTriggerInput;
+
+export type RiveShowcaseEntry = {
+  label: string;
+  kind: "rive" | "video";
+  src: string;
+  artboard?: string;
+  artboards?: string[];
+  stateMachine?: string;
+  inputs?: RiveInput[];
+  mobileNotice?: string;
+};
+
 export type BrainbiteCaseStudy = CaseStudyBase & {
   layout: "brainbite";
   heroImage: string;
@@ -140,11 +166,7 @@ export type BrainbiteCaseStudy = CaseStudyBase & {
   solution: string;
   gamifiedMedia: string[];
   gamifiedVideo: string;
-  mascot: {
-    src: string;
-    stateMachine: string;
-    inputName: string;
-  };
+  riveShowcase: RiveShowcaseEntry[];
 };
 
 export type CaseStudy = AudienceCaseStudy | BrainbiteCaseStudy;
@@ -326,7 +348,7 @@ export const contactLinks: ContactLink[] = [
   },
   {
     label: "Telegram",
-    href: "https://t.me/just_tem",
+    href: "https://t.me/temesgone",
     icon: "/assets/contact-telegram.png",
     iconType: "image",
     group: "primary",
@@ -507,11 +529,46 @@ export const caseStudies: CaseStudy[] = [
       "/assets/brainbite-game-progress.png"
     ],
     gamifiedVideo: "/assets/brainbite-highscore.mp4",
-    mascot: {
-      src: "/assets/steveirwin.riv",
-      stateMachine: "IdleTalkingLogic",
-      inputName: "isTalking"
-    },
+    riveShowcase: [
+      {
+        label: "Character animations",
+        kind: "rive",
+        src: "/assets/steveirwin.riv",
+        stateMachine: "IdleTalkingLogic",
+        inputs: [
+          {
+            kind: "boolean",
+            name: "isTalking",
+            label: "switch states"
+          }
+        ]
+      },
+      {
+        label: "Celebration screens",
+        kind: "video",
+        src: "/assets/brainbite-highscore.mp4"
+      },
+      {
+        label: "Mini-games and quizzes",
+        kind: "rive",
+        src: "/assets/bleumonk__the_clarifying_question.riv",
+        artboard: "Sequence",
+        stateMachine: "Master sequence",
+        mobileNotice: "Please open this page on a desktop or a tablet to view this preview"
+      },
+      {
+        label: "Game assets",
+        kind: "rive",
+        src: "/assets/coins.riv",
+        artboards: [
+          "BronzeCoin",
+          "PurpleCoin",
+          "SilverCoin",
+          "GreyCoin",
+          "GoldCoin"
+        ]
+      }
+    ],
     testimonial: [
       {
         quote:

@@ -1558,8 +1558,7 @@ button {
   text-align: left;
 }
 
-.brainbite-gamified-media,
-.brainbite-mascot-media {
+.brainbite-gamified-media {
   align-items: center;
   background: var(--surface-focus);
   border-radius: 24px;
@@ -1585,70 +1584,235 @@ button {
   width: 217px;
 }
 
-.brainbite-mascot-media {
-  height: 604px;
-}
-
-.brainbite-mascot-section {
-  align-items: stretch;
+.rive-showcase {
+  align-items: center;
   background: var(--surface-focus);
   border-radius: 24px;
-  flex-direction: row;
-  gap: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  justify-content: flex-start;
   min-height: 604px;
   overflow: hidden;
+  padding: 33px 24px;
+  width: 100%;
 }
 
-.brainbite-mascot-section .brainbite-mascot-media {
-  background: transparent;
-  border-radius: 0;
-  flex: 0 0 50%;
-  width: 50%;
+.rive-showcase-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
 }
 
-.brainbite-mascot-section .brainbite-section-copy {
-  align-self: center;
-  flex: 0 0 50%;
-  max-width: none;
-  padding: 48px;
-  text-align: left;
+.rive-showcase-tab {
+  background: #ffffff;
+  border: 1px solid rgba(102, 102, 102, 0.1);
+  border-radius: 999px;
+  color: #666666;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  line-height: 22px;
+  padding: 10px 12px;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.rive-mascot-demo {
+.rive-showcase-tab:hover {
+  border-color: rgba(102, 102, 102, 0.4);
+}
+
+.rive-showcase-tab--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000000;
+}
+
+.rive-showcase-select {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 8px;
+  width: 100%;
+}
+
+.rive-showcase-select span {
+  color: #666666;
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: -0.4px;
+  padding-left: 8px;
+}
+
+.rive-showcase-select-field {
+  position: relative;
+  width: 100%;
+}
+
+.rive-showcase-select select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  border: 1px solid #666666;
+  border-radius: 999px;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 16px;
+  height: 42px;
+  letter-spacing: -0.4px;
+  line-height: 22px;
+  padding: 0 44px 0 16px;
+  text-indent: 0;
+  width: 100%;
+}
+
+.rive-showcase-caret {
+  color: #666666;
+  pointer-events: none;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.rive-showcase-panel {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  width: 100%;
+}
+
+.rive-showcase-panel canvas {
+  height: auto;
+  max-height: 520px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.rive-showcase-video video {
+  max-height: 520px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.rive-showcase-grid {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  justify-content: center;
+  max-width: 100%;
+  width: 100%;
+}
+
+.rive-artboard-card {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rive-artboard-canvas {
+  align-items: center;
+  display: flex;
+  height: 160px;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+  width: 160px;
+}
+
+.rive-artboard-canvas canvas {
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+}
+
+.rive-artboard-label {
+  color: var(--label-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: -0.4px;
+  margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rive-showcase-single {
   align-items: center;
   display: flex;
   flex-direction: column;
   gap: 18px;
-}
-
-.rive-mascot-canvas {
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: var(--shadow-soft);
-  height: 400px;
-  overflow: hidden;
-  width: 415px;
-}
-
-.rive-mascot-canvas canvas {
-  height: 100%;
   width: 100%;
 }
 
-.rive-mascot-controls {
+.rive-showcase-canvas {
+  align-items: center;
   display: flex;
-  gap: 8px;
+  height: 520px;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.rive-showcase-canvas canvas {
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+}
+
+.rive-showcase-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.rive-showcase-notice {
+  align-items: center;
+  display: flex;
+  height: 520px;
+  justify-content: center;
+  max-width: 100%;
+  width: 100%;
+}
+
+.rive-showcase-notice p {
+  color: var(--label-secondary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 280px;
+  text-align: center;
 }
 
 .rive-state-button {
+  align-items: center;
   background: #ffffff;
-  border: 1px solid rgba(80, 80, 80, 0.7);
+  border: 1px solid #666666;
   border-radius: 999px;
   color: var(--label-primary);
+  display: inline-flex;
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1;
-  padding: 10px 16px;
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  line-height: 22px;
+  padding: 10px 12px;
 }
 
 .rive-state-button:disabled {
@@ -1656,11 +1820,40 @@ button {
   opacity: 0.45;
 }
 
+.rive-boolean-chip[aria-pressed="true"] {
+  background: var(--label-primary);
+  color: #ffffff;
+}
+
+.rive-trigger-button {
+  gap: 6px;
+}
+
+.rive-play-button {
+  gap: 6px;
+}
+
+.brainbite-rive-showcase-section {
+  align-items: center;
+  min-height: 604px;
+}
+
+.brainbite-rive-showcase-media {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.brainbite-rive-showcase-section .brainbite-section-copy {
+  max-width: 666px;
+  width: 100%;
+}
+
 .case-footer {
   align-items: flex-start;
   align-self: center;
   background: var(--surface-focus);
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   display: grid;
   grid-template-columns: 305px 1fr;
   gap: 65px;
@@ -1875,7 +2068,7 @@ button {
     min-width: 217px;
   }
 
-  .brainbite-mascot-section {
+  .brainbite-rive-showcase-section {
     align-items: center;
     background: transparent;
     border-radius: 0;
@@ -1885,19 +2078,32 @@ button {
     overflow: visible;
   }
 
-  .brainbite-mascot-section .brainbite-mascot-media {
-    background: var(--surface-focus);
+  .brainbite-rive-showcase-media {
+    background: transparent;
     border-radius: 24px;
     flex-basis: auto;
     width: 100%;
   }
 
-  .brainbite-mascot-section .brainbite-section-copy {
+  .brainbite-rive-showcase-section .brainbite-section-copy {
     flex-basis: auto;
     max-width: 666px;
     order: -1;
     padding: 0;
     text-align: center;
+  }
+
+  .rive-showcase {
+    padding: 33px 24px;
+  }
+
+  .rive-showcase-grid {
+    flex-wrap: wrap;
+  }
+
+  .rive-artboard-canvas {
+    height: 120px;
+    width: 120px;
   }
 }
 
@@ -2363,15 +2569,63 @@ button {
     width: 217px;
   }
 
-  .brainbite-mascot-media {
-    border-radius: 16px;
-    height: 444px;
-    width: 333px;
+  .brainbite-rive-showcase-section .brainbite-section-copy {
+    max-width: 291px;
   }
 
-  .rive-mascot-canvas {
-    height: 331px;
-    width: 329px;
+  .brainbite-rive-showcase-media {
+    width: 100%;
+  }
+
+  .rive-showcase {
+    border-radius: 16px;
+    gap: 24px;
+    min-height: 0;
+    padding: 24px 8px;
+  }
+
+  .rive-showcase-tabs {
+    display: none;
+  }
+
+  .rive-showcase-select {
+    display: flex;
+  }
+
+  .rive-showcase-panel {
+    width: 100%;
+  }
+
+  .rive-showcase-grid {
+    display: grid;
+    gap: 16px 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rive-artboard-card {
+    flex: none;
+    width: 100%;
+  }
+
+  .rive-artboard-canvas,
+  .rive-showcase-canvas {
+    height: 120px;
+    width: 100%;
+  }
+
+  .rive-artboard-canvas canvas,
+  .rive-showcase-canvas canvas {
+    height: 100%;
+    max-height: 120px;
+  }
+
+  .rive-showcase-controls {
+    gap: 8px;
+  }
+
+  .rive-state-button {
+    font-size: 14px;
+    padding: 8px 12px;
   }
 
   .case-footer {
@@ -2385,8 +2639,10 @@ button {
   }
 
   .case-footer .contact-cta {
+    align-self: center;
     height: 342px;
-    width: 305px;
+    max-width: 305px;
+    width: 100%;
   }
 
   .case-footer .contact-wave {
@@ -2398,6 +2654,11 @@ button {
   .case-footer .contact-group {
     align-items: center;
     text-align: center;
+  }
+
+  .case-footer .contact-inner {
+    max-width: 100%;
+    width: 100%;
   }
 
   .case-footer blockquote {
@@ -2661,6 +2922,10 @@ button {
   display: flex;
   gap: 18px;
   overflow-x: auto;
+}
+
+.work-rive-showcase {
+  margin-top: 24px;
 }
 
 .work-audience__media img,
