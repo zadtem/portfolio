@@ -1,3 +1,4 @@
+import { getPinterestFallback, type PinterestFallbackItem } from "./pinterest-fallback";
 export type ProjectVariant = "hero" | "phone" | "gallery" | "marketplace";
 export type ProjectStatus = "case-study" | "coming-soon";
 
@@ -72,6 +73,8 @@ export type TidbitPinterestCard = TidbitCardBase & {
   boardUrl: string;
   rssUrl: string;
   boardDescription: string;
+  image?: string;
+  fallbackImages?: PinterestFallbackItem[];
 };
 
 export type TidbitSpotifyCard = TidbitCardBase & {
@@ -378,7 +381,9 @@ export const tidbits: TidbitCard[] = [
     tone: "pink",
     boardUrl: "https://www.pinterest.com/meursaultfrommerkato/kitty-mechanic/",
     rssUrl: "https://www.pinterest.com/meursaultfrommerkato/kitty-mechanic.rss",
-    boardDescription: "Cars, details, and the people who love them."
+    boardDescription: "Cars, details, and the people who love them.",
+    image: "/assets/tidbits/kitty-mechanic-1.jpg",
+    fallbackImages: getPinterestFallback("kitty-mechanic")
   },
   {
     kind: "spotify",
@@ -403,7 +408,9 @@ export const tidbits: TidbitCard[] = [
     tone: "green",
     boardUrl: "https://www.pinterest.com/meursaultfrommerkato/it-moves/",
     rssUrl: "https://www.pinterest.com/meursaultfrommerkato/it-moves.rss",
-    boardDescription: "Looping videos, smooth motion, hypnotic things."
+    boardDescription: "Looping videos, smooth motion, hypnotic things.",
+    image: "/assets/tidbits/it-moves-1.jpg",
+    fallbackImages: getPinterestFallback("it-moves")
   },
   {
     kind: "spotify",
@@ -431,7 +438,9 @@ export const tidbits: TidbitCard[] = [
       "https://www.pinterest.com/meursaultfrommerkato/the-design-is-very-human/",
     rssUrl:
       "https://www.pinterest.com/meursaultfrommerkato/the-design-is-very-human.rss",
-    boardDescription: "Industrial design that starts with how things feel."
+    boardDescription: "Industrial design that starts with how things feel.",
+    image: "/assets/tidbits/the-design-is-very-human-1.jpg",
+    fallbackImages: getPinterestFallback("the-design-is-very-human")
   },
   {
     kind: "spotify",

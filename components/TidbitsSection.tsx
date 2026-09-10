@@ -83,7 +83,19 @@ function SpotifyEmbed({
 }
 
 function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pinterest" }> }) {
-  const [images, setImages] = useState<PreviewImage[]>([]);
+  const initialImages = useMemo(() => {
+    const fallbacks = card.fallbackImages ?? [];
+    return randomizeInitialImage(
+      fallbacks.map((item) => ({
+        id: item.id,
+        imageUrl: item.imageUrl,
+        alt: item.alt,
+        link: item.link ?? card.boardUrl
+      }))
+    );
+  }, [card.boardUrl, card.fallbackImages]);
+
+  const [images, setImages] = useState<PreviewImage[]>(initialImages);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -100,8 +112,8 @@ function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pintere
         return (await response.json()) as PinterestPreviewResponse;
       })
       .then((payload) => {
-        if (!controller.signal.aborted) {
-          const items = (payload.items ?? []).map(({ id, imageUrl, alt, link }) => ({
+        if (!controller.signal.aborted && payload.items && payload.items.length > 0) {
+          const items = payload.items.map(({ id, imageUrl, alt, link }) => ({
             id,
             imageUrl,
             alt,
@@ -111,9 +123,7 @@ function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pintere
         }
       })
       .catch(() => {
-        if (!controller.signal.aborted) {
-          setImages([]);
-        }
+        // Keep fallback images on network failure
       });
 
     return () => controller.abort();
@@ -207,8 +217,13 @@ function PreviewCard({
     const timeout = window.setTimeout(async () => {
       const isLoaded = await preloadImage(images[nextImageIndex].imageUrl);
 
-      if (!cancelled && isLoaded) {
-        setActiveImageIndex(nextImageIndex);
+      if (!cancelled) {
+        if (isLoaded) {
+          setActiveImageIndex(nextImageIndex);
+        } else {
+          // If the next image failed to preload, skip to the following one so rotation doesn't freeze
+          setActiveImageIndex((nextImageIndex + 1) % images.length);
+        }
       }
     }, 3000);
 
@@ -244,6 +259,12 @@ function PreviewCard({
               key={activeImage.id}
               src={activeImage.imageUrl}
               alt={activeImage.alt}
+              referrerPolicy="no-referrer"
+              onError={() => {
+                if (images.length > 1) {
+                  setActiveImageIndex((prev) => (prev + 1) % images.length);
+                }
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -264,6 +285,7 @@ function PreviewCard({
 function preloadImage(imageUrl: string) {
   return new Promise<boolean>((resolve) => {
     const image = new Image();
+    image.referrerPolicy = "no-referrer";
     image.onload = () => resolve(true);
     image.onerror = () => resolve(false);
     image.src = imageUrl;
