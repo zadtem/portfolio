@@ -83,19 +83,17 @@ function SpotifyEmbed({
 }
 
 function PinterestPreview({ card }: { card: Extract<TidbitCard, { kind: "pinterest" }> }) {
-  const initialImages = useMemo(() => {
+  const fallbackImages = useMemo(() => {
     const fallbacks = card.fallbackImages ?? [];
-    return randomizeInitialImage(
-      fallbacks.map((item) => ({
-        id: item.id,
-        imageUrl: item.imageUrl,
-        alt: item.alt,
-        link: item.link ?? card.boardUrl
-      }))
-    );
+    return fallbacks.map((item) => ({
+      id: item.id,
+      imageUrl: item.imageUrl,
+      alt: item.alt,
+      link: item.link ?? card.boardUrl
+    }));
   }, [card.boardUrl, card.fallbackImages]);
 
-  const [images, setImages] = useState<PreviewImage[]>(initialImages);
+  const [images, setImages] = useState<PreviewImage[]>(fallbackImages);
 
   useEffect(() => {
     const controller = new AbortController();
